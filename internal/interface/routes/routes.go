@@ -1,7 +1,10 @@
 package routes
 
 import (
+	"net/http"
+
 	"user_jwt/internal/interface/handler"
+	"user_jwt/internal/interface/middleware"
 	"user_jwt/internal/interface/repository"
 	"user_jwt/internal/usecase"
 	"user_jwt/pkg/config"
@@ -22,5 +25,18 @@ func SetupRoutes(router *gin.Engine) {
 	{
 		auth.POST("/signup", authHandler.Signup)
 		auth.POST("/signin", authHandler.Signin)
+	}
+
+	// 認証が必要なエンドポイント
+	protected := router.Group("/protected")
+	protected.Use(middleware.AuthMiddleware()) // ミドルウェアを適用
+	{
+		protected.GET("/userinfo", func(c *gin.Context) {
+			// コンテキストからユーザー情報を取得
+			userID := c.GetInt("userID")
+			email := c.GetString("email")
+
+			c.JSON(http.StatusOK, gin.H{"userID": userID, "email": email})
+		})
 	}
 }
