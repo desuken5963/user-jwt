@@ -1,0 +1,28 @@
+# ベースイメージ
+FROM golang:1.23.4 as builder
+
+# 作業ディレクトリ
+WORKDIR /app
+
+# モジュールファイルをコピーして依存関係をインストール
+COPY go.mod go.sum ./
+RUN go mod download
+
+# ソースコードをコピー
+COPY . .
+
+# アプリケーションをビルド
+RUN go build -o /app/main cmd/main.go
+
+# 実行専用の軽量イメージ
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+
+# 作業ディレクトリ
+WORKDIR /root/
+
+# ビルドしたバイナリをコピー
+COPY --from=builder /app/main .
+
+# 実行ファイルを指定
+CMD ["./main"]
