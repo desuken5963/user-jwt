@@ -1,0 +1,44 @@
+# コンテナ内で生成される一時ファイルやビルド成果物
+tmp/
+*.log
+
+# バイナリファイル
+/app/main
+*.exe
+*.out
+*.o
+
+# Go の依存関係キャッシュ（コンテナ外の場合でもキャッシュを無視）
+/vendor/
+/.gopath/
+/.go-build/
+/.cache/
+
+# Docker関連の一時ファイル
+.Dockerfile.swp
+*.swp
+
+# IDE やエディタ関連のファイル
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.iml
+
+# OS の一時ファイル
+.DS_Store
+Thumbs.db
+
+# アプリケーション環境設定
+.env
+*.env.local
+*.env.production
+*.env.development
+
+# ログファイル
+*.log
+*.pid
+*.seed
+
+# その他
+node_modules/
