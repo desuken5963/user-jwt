@@ -23,15 +23,15 @@ func SetupRoutes(router *gin.Engine) {
 	// ルート設定
 	auth := router.Group("/auth")
 	{
-		auth.POST("/signup", authHandler.Signup)
-		auth.POST("/signin", authHandler.Signin)
+		auth.POST("/sign-up", authHandler.Signup)
+		auth.POST("/sign-in", authHandler.Signin)
 	}
 
 	// 認証が必要なエンドポイント
 	protected := router.Group("/protected")
 	protected.Use(middleware.AuthMiddleware()) // ミドルウェアを適用
 	{
-		protected.GET("/userinfo", func(c *gin.Context) {
+		protected.GET("/user-info", func(c *gin.Context) {
 			// コンテキストからユーザー情報を取得
 			userID := c.GetInt("userID")
 			email := c.GetString("email")
