@@ -1,9 +1,9 @@
 services:
-  app:
+  api:
     build:
       context: .
       dockerfile: ${DOCKERFILE:-Dockerfile.dev}
-    container_name: user_jwt_app
+    container_name: user_jwt_api
     ports:
       - "8080:8080"
     environment:
@@ -13,7 +13,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
     volumes:
-      - .:/app
+      - .:/api
     depends_on:
       - db
 
