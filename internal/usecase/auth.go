@@ -9,8 +9,8 @@ import (
 
 // AuthUsecase インターフェース
 type AuthUsecase interface {
-	Signup(email, password string) (domain.User, error)
-	Signin(email, password string) (string, error) // JWTトークンを返す
+	SignUp(email, password string) (domain.User, error)
+	SignIn(email, password string) (string, error) // JWTトークンを返す
 }
 
 type authUsecase struct {
@@ -21,7 +21,7 @@ func NewAuthUsecase(userRepo repository.UserRepository) AuthUsecase {
 	return &authUsecase{userRepo: userRepo}
 }
 
-func (u *authUsecase) Signup(email, password string) (domain.User, error) {
+func (u *authUsecase) SignUp(email, password string) (domain.User, error) {
 	// 重複チェック
 	existingUser, _ := u.userRepo.FindByEmail(email)
 	if existingUser != nil {
@@ -47,7 +47,7 @@ func (u *authUsecase) Signup(email, password string) (domain.User, error) {
 	return createdUser, nil
 }
 
-func (u *authUsecase) Signin(email, password string) (string, error) {
+func (u *authUsecase) SignIn(email, password string) (string, error) {
 	// ユーザー取得
 	user, err := u.userRepo.FindByEmail(email)
 	if err != nil || user == nil {

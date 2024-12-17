@@ -23,8 +23,8 @@ func SetupRoutes(router *gin.Engine) {
 	// ルート設定
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", authHandler.Signup)
-		auth.POST("/sign-in", authHandler.Signin)
+		auth.POST("/sign-up", authHandler.SignUp)
+		auth.POST("/sign-in", authHandler.SignIn)
 	}
 
 	// 認証が必要なエンドポイント
