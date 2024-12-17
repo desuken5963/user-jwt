@@ -31,3 +31,14 @@ func (r *userRepository) Create(user domain.User) (domain.User, error) {
 	}
 	return user, nil
 }
+
+func (r *userRepository) FindByID(userID uint) (*domain.User, error) {
+	var user domain.User
+	if err := r.db.First(&user, userID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
+}
