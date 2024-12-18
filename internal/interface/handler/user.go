@@ -17,6 +17,11 @@ func NewUserHandler(userUsecase usecase.UserUsecase) *UserHandler {
 	return &UserHandler{userUsecase: userUsecase}
 }
 
+// TODO:リクエストを外出ししてid自体にもバリデーションをかける2
+// type GetUserByIDRequest struct {
+// 	ID uint `validate:"id"`
+// }
+
 // GetUserByID ユーザーIDで情報を取得
 // @Summary      Get User by ID
 // @Description  Retrieve user information using the user ID
@@ -29,6 +34,9 @@ func NewUserHandler(userUsecase usecase.UserUsecase) *UserHandler {
 // @Failure      404  {object}  map[string]string       "User Not Found"
 // @Router       /user/{id} [get]
 func (h *UserHandler) GetUserByID(c *gin.Context) {
+	// TODO:リクエストを外出ししてid自体にもバリデーションをかける1
+	// var req GetUserByIDRequest
+
 	idParam := c.Param("id")
 	userID, err := strconv.Atoi(idParam)
 	if err != nil {
