@@ -1,0 +1,15 @@
+# ビルド不要なファイル
+Dockerfile.dev
+# Dockerfile.prod
+docker-compose.yml
+README.md
+
+# ドキュメント関連
+docs/
+
+# 一時ファイルやキャッシュなど
+tmp/
+
+# バージョン管理関連
+.git
+.gitignore
