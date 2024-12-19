@@ -16,13 +16,43 @@ func NewAuthHandler(authUsecase usecase.AuthUsecase) *AuthHandler {
 	return &AuthHandler{authUsecase: authUsecase}
 }
 
-func (h *AuthHandler) Signup(c *gin.Context) {
-	var req struct {
-		Email                string `json:"email" binding:"required,email"`
-		Password             string `json:"password" binding:"required,min=8"`
-		PasswordConfirmation string `json:"password_confirmation" binding:"required"`
-	}
+// リクエスト・レスポンス用構造体定義
+type SignUpRequest struct {
+	Email                string `json:"email" binding:"required,email"`
+	Password             string `json:"password" binding:"required,min=8"`
+	PasswordConfirmation string `json:"password_confirmation" binding:"required"`
+}
 
+type UserResponse struct {
+	ID    uint   `json:"id"`
+	Email string `json:"email"`
+}
+
+type SignUpResponse struct {
+	User UserResponse `json:"user"`
+}
+
+type SignInRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}
+
+type SignInResponse struct {
+	Token string `json:"token"`
+}
+
+// @Summary      Sign Up
+// @Description  Register a new user
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        body  body  SignUpRequest  true  "SignUp payload"
+// @Success      201   {object} SignUpResponse
+// @Failure      400   {object} map[string]string
+// @Failure      409   {object} map[string]string
+// @Router       /auth/sign-up [post]
+func (h *AuthHandler) SignUp(c *gin.Context) {
+	var req SignUpRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request", "details": err.Error()})
 		return
@@ -33,31 +63,44 @@ func (h *AuthHandler) Signup(c *gin.Context) {
 		return
 	}
 
-	user, err := h.authUsecase.Signup(req.Email, req.Password)
+	user, err := h.authUsecase.SignUp(req.Email, req.Password)
 	if err != nil {
 		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"user": user})
+	response := SignUpResponse{
+		User: UserResponse{
+			ID:    user.ID,
+			Email: user.Email,
+		},
+	}
+	c.JSON(http.StatusCreated, response)
 }
 
-func (h *AuthHandler) Signin(c *gin.Context) {
-	var req struct {
-		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required"`
-	}
-
+// @Summary      Sign In
+// @Description  Authenticate a user and return a JWT token
+// @Tags         auth
+// @Accept       json
+// @Produce      json
+// @Param        body  body  SignInRequest  true  "SignIn payload"
+// @Success      200   {object} SignInResponse
+// @Failure      400   {object} map[string]string
+// @Failure      401   {object} map[string]string
+// @Router       /auth/sign-in [post]
+func (h *AuthHandler) SignIn(c *gin.Context) {
+	var req SignInRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request", "details": err.Error()})
 		return
 	}
 
-	token, err := h.authUsecase.Signin(req.Email, req.Password)
+	token, err := h.authUsecase.SignIn(req.Email, req.Password)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	response := SignInResponse{Token: token}
+	c.JSON(http.StatusOK, response)
 }
