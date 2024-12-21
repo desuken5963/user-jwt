@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"user_jwt/internal/domain"
+	"user-jwt/internal/domain"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

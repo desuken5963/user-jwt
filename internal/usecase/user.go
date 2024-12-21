@@ -2,8 +2,8 @@ package usecase
 
 import (
 	"errors"
-	"user_jwt/internal/domain"
-	"user_jwt/internal/repository"
+	"user-jwt/internal/domain"
+	"user-jwt/internal/repository"
 )
 
 // UserUsecase ユーザーに関するユースケース

@@ -1,4 +1,4 @@
-# user_jwt
+# user-jwt
 
 ## api
 

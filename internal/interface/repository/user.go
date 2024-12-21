@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"user_jwt/internal/domain"
+	"user-jwt/internal/domain"
 
 	"gorm.io/gorm"
 )

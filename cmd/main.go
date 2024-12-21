@@ -1,9 +1,9 @@
 package main
 
 import (
-	_ "user_jwt/docs"
-	"user_jwt/internal/interface/routes"
-	"user_jwt/pkg/config"
+	_ "user-jwt/docs"
+	"user-jwt/internal/interface/routes"
+	"user-jwt/pkg/config"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

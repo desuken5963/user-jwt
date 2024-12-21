@@ -2,9 +2,9 @@ package usecase
 
 import (
 	"errors"
-	"user_jwt/internal/domain"
-	"user_jwt/internal/repository"
-	"user_jwt/pkg/utils"
+	"user-jwt/internal/domain"
+	"user-jwt/internal/repository"
+	"user-jwt/pkg/utils"
 )
 
 // AuthUsecase インターフェース

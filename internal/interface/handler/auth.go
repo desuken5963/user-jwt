@@ -3,7 +3,7 @@ package handler
 import (
 	"net/http"
 
-	"user_jwt/internal/usecase"
+	"user-jwt/internal/usecase"
 
 	"github.com/gin-gonic/gin"
 )
