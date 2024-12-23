@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"user-jwt/internal/usecase"
+	"user-jwt/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,10 +18,9 @@ func NewUserHandler(userUsecase usecase.UserUsecase) *UserHandler {
 	return &UserHandler{userUsecase: userUsecase}
 }
 
-// TODO:リクエストを外出ししてid自体にもバリデーションをかける2
-// type GetUserByIDRequest struct {
-// 	ID uint `validate:"id"`
-// }
+type GetUserByIDRequest struct {
+	ID uint `validate:"required,min=1"`
+}
 
 // GetUserByID ユーザーIDで情報を取得
 // @Summary      Get User by ID
@@ -34,13 +34,17 @@ func NewUserHandler(userUsecase usecase.UserUsecase) *UserHandler {
 // @Failure      404  {object}  map[string]string       "User Not Found"
 // @Router       /user/{id} [get]
 func (h *UserHandler) GetUserByID(c *gin.Context) {
-	// TODO:リクエストを外出ししてid自体にもバリデーションをかける1
-	// var req GetUserByIDRequest
-
 	idParam := c.Param("id")
 	userID, err := strconv.Atoi(idParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	req := GetUserByIDRequest{ID: uint(userID)}
+	validationErrors := utils.ValidateStruct(&req)
+	if validationErrors != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Validation failed", "details": validationErrors})
 		return
 	}
 
