@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"user_jwt/internal/interface/handler"
-	"user_jwt/internal/interface/middleware"
-	"user_jwt/internal/interface/repository"
-	"user_jwt/internal/usecase"
-	"user_jwt/pkg/config"
+	"user-jwt/internal/interface/handler"
+	"user-jwt/internal/interface/middleware"
+	"user-jwt/internal/interface/repository"
+	"user-jwt/internal/usecase"
+	"user-jwt/pkg/config"
 
 	"github.com/gin-gonic/gin"
 )

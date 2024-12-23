@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"user_jwt/pkg/utils"
+	"user-jwt/pkg/utils"
 )
 
 // AuthMiddleware JWTトークンを検証するミドルウェア
