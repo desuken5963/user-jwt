@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"user-jwt/internal/usecase"
+	"user-jwt/pkg/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,11 +17,11 @@ func NewAuthHandler(authUsecase usecase.AuthUsecase) *AuthHandler {
 	return &AuthHandler{authUsecase: authUsecase}
 }
 
-// リクエスト・レスポンス用構造体定義
+// SugnUPリクエスト・レスポンス用構造体定義
 type SignUpRequest struct {
-	Email                string `json:"email" binding:"required,email"`
-	Password             string `json:"password" binding:"required,min=8"`
-	PasswordConfirmation string `json:"password_confirmation" binding:"required"`
+	Email                string `json:"email" validate:"required,email"`
+	Password             string `json:"password" validate:"required,min=8"`
+	PasswordConfirmation string `json:"password_confirmation" validate:"required"`
 }
 
 type UserResponse struct {
@@ -32,9 +33,10 @@ type SignUpResponse struct {
 	User UserResponse `json:"user"`
 }
 
+// SugnINリクエスト・レスポンス用構造体定義
 type SignInRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
 }
 
 type SignInResponse struct {
@@ -55,6 +57,12 @@ func (h *AuthHandler) SignUp(c *gin.Context) {
 	var req SignUpRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request", "details": err.Error()})
+		return
+	}
+
+	validationErrors := utils.ValidateStruct(&req)
+	if validationErrors != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Validation failed", "details": validationErrors})
 		return
 	}
 
@@ -92,6 +100,12 @@ func (h *AuthHandler) SignIn(c *gin.Context) {
 	var req SignInRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request", "details": err.Error()})
+		return
+	}
+
+	validationErrors := utils.ValidateStruct(req)
+	if validationErrors != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Validation failed", "details": validationErrors})
 		return
 	}
 
