@@ -11,11 +11,7 @@ WORKDIR /api
 
 # モジュールファイルをコピーして依存関係をインストール
 COPY go.mod go.sum ./
-RUN go mod download
-
-# Swagger UI ライブラリのインストール
-RUN go get -u github.com/swaggo/gin-swagger && \
-    go get -u github.com/swaggo/files
+RUN go mod tidy
 
 # # ソースコードをコピー
 COPY . .
