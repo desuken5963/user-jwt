@@ -25,6 +25,8 @@ func SetupRoutes(router *gin.Engine) {
 		auth.POST("/sign-in", authHandler.SignIn)
 	}
 
+	handler.RegisterHandlers(router, authHandler)
+
 	user := router.Group("/user")
 	user.Use(middleware.AuthMiddleware())
 	{

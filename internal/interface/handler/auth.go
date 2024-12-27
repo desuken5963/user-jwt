@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"context"
 	"net/http"
+	"strings"
+	"time"
 
 	"user-jwt/internal/usecase"
+	"user-jwt/pkg/config"
 	"user-jwt/pkg/utils"
 
 	"github.com/gin-gonic/gin"
@@ -117,4 +121,34 @@ func (h *AuthHandler) SignIn(c *gin.Context) {
 
 	response := SignInResponse{Token: token}
 	c.JSON(http.StatusOK, response)
+}
+
+func (h *AuthHandler) PostAuthSignOut(c *gin.Context) {
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
+		return
+	}
+
+	tokenString := strings.TrimPrefix(authHeader, "Bearer ")
+	if tokenString == authHeader {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token format"})
+		return
+	}
+
+	claims, err := utils.VerifyJWT(tokenString)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+		return
+	}
+
+	// トークンをRedisに追加
+	expiration := time.Until(claims.ExpiresAt.Time)
+	err = config.RedisClient.Set(context.Background(), tokenString, "revoked", expiration).Err()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to revoke token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Successfully signed out"})
 }
