@@ -1,0 +1,5 @@
+package: handler
+output: internal/interface/handler/sign_out.gen.go
+generate:
+  - types
+  - gin

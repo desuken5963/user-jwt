@@ -3,7 +3,8 @@ FROM golang:1.23.2
 
 # Air のインストール
 RUN go install github.com/cosmtrek/air@v1.40.4 && \
-    go install github.com/swaggo/swag/cmd/swag@latest
+    go install github.com/swaggo/swag/cmd/swag@latest && \
+    go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
 
 # 作業ディレクトリ
 WORKDIR /api
