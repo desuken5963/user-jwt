@@ -19,6 +19,8 @@ func main() {
 
 	// データベース接続の初期化
 	config.ConnectDB()
+	// Redis接続
+	config.ConnectRedis()
 
 	// ルートの設定
 	routes.SetupRoutes(r)
